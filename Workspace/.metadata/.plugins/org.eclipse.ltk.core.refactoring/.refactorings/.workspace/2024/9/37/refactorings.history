@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">&#x0A;<refactoring comment="Delete resource &apos;Task/Middlewares/Third_Party/Segger&apos;" deleteContents="false" description="Delete resource &apos;Task/Middlewares/Third_Party/Segger&apos;" element1="/Task/Middlewares/Third_Party/Segger" flags="7" id="org.eclipse.ltk.core.refactoring.delete.resources" resources="1" stamp="1726084284075"/>&#x0A;<refactoring comment="Delete resource &apos;Task/Middlewares/Third_Party/FreeRTOS/org&apos;" deleteContents="false" description="Delete resource &apos;Task/Middlewares/Third_Party/FreeRTOS/org&apos;" element1="/Task/Middlewares/Third_Party/FreeRTOS/org" flags="7" id="org.eclipse.ltk.core.refactoring.delete.resources" resources="1" stamp="1726084304361"/>
+</session>
