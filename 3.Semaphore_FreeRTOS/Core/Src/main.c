@@ -37,6 +37,11 @@
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
 
+#define LED_PORT		GPIOD
+#define GREEN_LED 		GPIO_PIN_12
+#define ORANGE_LED 		GPIO_PIN_13
+#define RED_LED 		GPIO_PIN_14
+
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -47,6 +52,12 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
+
+uint32_t greenTaskProfiler;
+uint32_t orangeTaskProfiler;
+uint32_t redTaskProfiler;
+
+SemaphoreHandle_t xBinarySemaphore;
 
 /* USER CODE END PV */
 
@@ -61,24 +72,32 @@ static void MX_GPIO_Init(void);
 /* USER CODE BEGIN 0 */
 
 void GreenLedTask(void *pvParameters) {
+	xSemaphoreGive(xBinarySemaphore);
 	while (1) {
+		xSemaphoreTake(xBinarySemaphore, portMAX_DELAY);
 		HAL_GPIO_TogglePin(LED_PORT, GREEN_LED);
-		HAL_Delay(500);
-		vTaskDelay(pdMS_TO_TICKS(1000));
+		greenTaskProfiler++;
+		xSemaphoreGive(xBinarySemaphore);
 	}
 }
 
 void OrangeLedTask(void *pvParameters) {
 	while (1) {
+		xSemaphoreTake(xBinarySemaphore, portMAX_DELAY);
 		HAL_GPIO_TogglePin(LED_PORT, ORANGE_LED);
-		vTaskDelay(pdMS_TO_TICKS(100));
+		orangeTaskProfiler++;
+		xSemaphoreGive(xBinarySemaphore);
+
 	}
 }
 
-void BlueLedTask(void *pvParameters) {
+void redLedTask(void *pvParameters) {
 	while (1) {
+		xSemaphoreTake(xBinarySemaphore, portMAX_DELAY);
 		HAL_GPIO_TogglePin(LED_PORT, RED_LED);
-		vTaskDelay(pdMS_TO_TICKS(300));
+		redTaskProfiler++;
+		xSemaphoreGive(xBinarySemaphore);
+
 	}
 }
 /* USER CODE END 0 */
@@ -113,10 +132,10 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   /* USER CODE BEGIN 2 */
-
+  	xBinarySemaphore = xSemaphoreCreateBinary();
   	xTaskCreate(GreenLedTask, "LED green task", 200, NULL, 2, NULL);
 	xTaskCreate(OrangeLedTask, "LED orange task", 200, NULL, 2, NULL);
-	xTaskCreate(BlueLedTask,"LED blue task", 200, NULL, 2, NULL);
+	xTaskCreate(redLedTask,"LED red task", 200, NULL, 2, NULL);
 
 	vTaskStartScheduler();
 
@@ -195,10 +214,10 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOA_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12|GPIO_PIN_13|GPIO_PIN_14, GPIO_PIN_RESET);
 
-  /*Configure GPIO pin : PD12 */
-  GPIO_InitStruct.Pin = GPIO_PIN_12;
+  /*Configure GPIO pins : PD12 PD13 PD14 */
+  GPIO_InitStruct.Pin = GPIO_PIN_12|GPIO_PIN_13|GPIO_PIN_14;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;

@@ -411,7 +411,7 @@ void vPortEndScheduler( void )
 /*-----------------------------------------------------------*/
 
 void vPortEnterCritical( void )
-{
+   {
     portDISABLE_INTERRUPTS();
     uxCriticalNesting++;
 
