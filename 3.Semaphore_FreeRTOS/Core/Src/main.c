@@ -132,10 +132,11 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   /* USER CODE BEGIN 2 */
+  
   	xBinarySemaphore = xSemaphoreCreateBinary();
   	xTaskCreate(GreenLedTask, "LED green task", 200, NULL, 2, NULL);
-	xTaskCreate(OrangeLedTask, "LED orange task", 200, NULL, 2, NULL);
-	xTaskCreate(redLedTask,"LED red task", 200, NULL, 2, NULL);
+	  xTaskCreate(OrangeLedTask, "LED orange task", 200, NULL, 2, NULL);
+	  xTaskCreate(redLedTask,"LED red task", 200, NULL, 2, NULL);
 
 	vTaskStartScheduler();
 
